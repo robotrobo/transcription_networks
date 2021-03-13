@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View graph</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='style_graph.css')}}">
+
+</head>
+<body>
+    <div id="mynetwork"></div>
+
+
+    <script src="{{url_for('static', filename='js/graph.js')}}"></script>
+
+    <script>
+        createGraph(`{{ value }}`);
+    </script>
+<a type="button" href="/">Go back</a>
+<button onclick="exportNetwork()">Export network</button>
+
+</body>
+</html>

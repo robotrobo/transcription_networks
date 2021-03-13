@@ -4,16 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Graph Tool</title>
-
-
-    <h1>Transcription Networks</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Transctiptions networkst</title>
 </head>
 
-
-
 <body>
+
+    <div class="container">
+        <h1>Transcription networks </h1>
+
+        <form action="gen_graph" id="join-us" method="POST">
+            <div class="fields">
+                <span>
+                    <input name="nodes" id="nodes" placeholder="Enter number of nodes" type="text" />
+                </span>
+                <br />
+                <span>
+                    <input name="edges" id="edges" placeholder="Enter number of edges" type="text" />
+                </span>
+            </div>
+            <div class="submit">
+                <button class="submit" value="Submit" type="submit" formmethod="POST"> Submit </button>
+            </div>
+        </form>
+    </div>
+
 
 </body>
 

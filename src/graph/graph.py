@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+from networkx.drawing.nx_agraph import write_dot
 
 
 def add_random_edges(graph, n):
@@ -14,16 +15,15 @@ def add_random_edges(graph, n):
                         np.random.randint(0, graph.number_of_nodes() + 1))
         edges.append(new_edge)
     graph.add_edges_from(edges)
+    graph.nodes[0]["test"] = "test2"
 
 
-def generate_button(values):
+def generate_graph(values, graph_name):
     try:
-        values = [int(values[x]) for x in values]
-    except ValueError:
-        print("Please enter a valid number in the input boxes")
+        values = [int(x) for x in values]
+    except ValueError as e:
+        raise
     G = nx.DiGraph()
     G.add_nodes_from(range(values[0]))
-    G.add_edge(0, 1)
     add_random_edges(G, values[1])
-    nx.draw(G, with_labels=True)
-    plt.show()
+    write_dot(G, graph_name)
