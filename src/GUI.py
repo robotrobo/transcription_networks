@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from graph.graph import generate_graph
+from graph.graph import generate_graph, insert_edge
 import uuid
 
 GRAPH_DIR = "static/generated_graphs"
@@ -30,3 +30,12 @@ def gen_graph():
 @app.route('/view_graph/')
 def view_graph():
     return render_template('view_graph.html', value=request.args.get('name'))
+
+@app.route('/add_edge', methods=['POST'])
+def add_edge():
+    form = request.form
+    data = [form["from"], form["to"]]
+    insert_edge(form["name"], form["from"], form["to"])
+    print(data)
+    print(form["name"])
+    return "Okay"

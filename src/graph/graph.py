@@ -2,6 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 from networkx.drawing.nx_agraph import write_dot
+from networkx.drawing.nx_agraph import read_dot
 
 
 def add_random_edges(graph, n):
@@ -27,3 +28,10 @@ def generate_graph(values, graph_name):
     G.add_nodes_from(range(values[0]))
     add_random_edges(G, values[1])
     write_dot(G, graph_name)
+    
+
+def insert_edge(name, from_edge, to_edge):
+    name_trimmed = name[1:] # We ignore the leading slash
+    G = nx.DiGraph(read_dot(name_trimmed))
+    G.add_edge(int(from_edge), int(to_edge))
+    write_dot(G, name_trimmed)

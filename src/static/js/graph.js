@@ -1,23 +1,19 @@
-function readTextFile(file)
-{
-    var rawFile = new XMLHttpRequest();
-    var text = ""
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                // alert(allText)
-                // return allText;
-                text = allText;
-            }
-        }
+function readTextFile(file) {
+  var rawFile = new XMLHttpRequest();
+  var text = ""
+  rawFile.open("GET", file, false);
+  rawFile.onreadystatechange = function () {
+    if (rawFile.readyState === 4) {
+      if (rawFile.status === 200 || rawFile.status == 0) {
+        var allText = rawFile.responseText;
+        // alert(allText)
+        // return allText;
+        text = allText;
+      }
     }
-    rawFile.send(null);
-    return text;
+  }
+  rawFile.send(null);
+  return text;
 }
 
 var network;
@@ -25,7 +21,7 @@ var network;
 
 function createGraph(dot_file_name) {
 
-  DOTstring =  readTextFile(dot_file_name);
+  DOTstring = readTextFile(dot_file_name);
   console.log(DOTstring);
 
   const container = document.getElementById('mynetwork');
@@ -37,39 +33,33 @@ function createGraph(dot_file_name) {
     edges: parsedData.edges
   };
 
-  var options = parsedData.options;
+  // var options = parsedData.options;
+  options = {
+    interaction: {
+      hover: true
+    },
+    manipulation: {
+      enabled: true,
+    }
+  }
 
-  // you can extend the options like a normal JSON variable:
   options.nodes = {
-    color: "red"
+    color: "red",
+
   };
 
   // initialize your network!
   network = new vis.Network(container, data, options);
-}
+  network.on("controlNodeDragEnd", function (params) {
+    params.event = "[original event]";
+    if (params.controlEdge.from != undefined && params.controlEdge.to != undefined) {
+      console.log("controlNodeDragEnd Event:", params.controlEdge);
+      // Ask flask to modify our dot file
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/add_edge");
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send(`from=${params.controlEdge.from}&to=${params.controlEdge.to}&name=${dot_file_name}`); 
 
-function addConnections(elem, index) {
-  elem.connections = network.getConnectedNodes(index);
-}
-
-
-
-function exportNetwork() {
-
-  var nodes = objectToArray(network.getPositions());
-
-  nodes.forEach(addConnections);
-
-  // pretty print node data
-  var exportValue = JSON.stringify(nodes, undefined, 2);
-
-  console.log(exportValue);
-}
-
-
-function objectToArray(obj) {
-  return Object.keys(obj).map(function (key) {
-    obj[key].id = key;
-    return obj[key];
+    }
   });
 }
