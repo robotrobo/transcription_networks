@@ -17,6 +17,7 @@ function readTextFile(file) {
 }
 
 var network;
+var deleteEdge = false;
 
 
 function createGraph(dot_file_name) {
@@ -58,8 +59,37 @@ function createGraph(dot_file_name) {
       var xhttp = new XMLHttpRequest();
       xhttp.open("POST", "/add_edge");
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.send(`from=${params.controlEdge.from}&to=${params.controlEdge.to}&name=${dot_file_name}`); 
+      xhttp.send(`from=${params.controlEdge.from}&to=${params.controlEdge.to}&name=${dot_file_name}`);
 
     }
   });
+  network.on("click", function (params) {
+
+    var delete_button = document.getElementsByClassName("vis-delete")[0];
+
+    console.log(delete_button);
+
+    if (delete_button != undefined) {
+      let edge;
+
+
+      if (params.edges.length != 0) {
+        edge = network.body.edges[params.edges[0]];
+      }
+
+      delete_button.onpointerdown = function () {
+
+          console.log("Deleting edge :\n");
+          // console.log(edge);
+          // Ask flask to remove the edge from the dot file
+          var xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "/remove_edge");
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhttp.send(`from=${edge.fromId}&to=${edge.toId}&name=${dot_file_name}`);
+    
+        
+      };
+    }
+  });
+
 }

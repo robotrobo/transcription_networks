@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from graph.graph import generate_graph, insert_edge
+from graph.graph import generate_graph, insert_edge, delete_edge
 import uuid
 
 GRAPH_DIR = "static/generated_graphs"
@@ -36,6 +36,15 @@ def add_edge():
     form = request.form
     data = [form["from"], form["to"]]
     insert_edge(form["name"], form["from"], form["to"])
+    print(data)
+    print(form["name"])
+    return "Okay"
+
+@app.route('/remove_edge', methods=['POST'])
+def remove_edge():
+    form = request.form
+    data = [form["from"], form["to"]]
+    delete_edge(form["name"], form["from"], form["to"])
     print(data)
     print(form["name"])
     return "Okay"

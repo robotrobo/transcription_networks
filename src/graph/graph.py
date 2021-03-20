@@ -35,3 +35,10 @@ def insert_edge(name, from_edge, to_edge):
     G = nx.DiGraph(read_dot(name_trimmed))
     G.add_edge(int(from_edge), int(to_edge))
     write_dot(G, name_trimmed)
+
+def delete_edge(name, from_edge, to_edge):
+    name_trimmed = name[1:] # We ignore the leading slash
+    G = nx.DiGraph(read_dot(name_trimmed))
+    print(G.edges)
+    G.remove_edge(from_edge, to_edge)
+    write_dot(G, name_trimmed)
