@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select graph</title>
+    <h1>Choose the name of your graph</h1>
+    <ol>
+        {% for graph in graphs %}
+        <li><a href="/view_graph?name=/{{dir}}/{{graph}}">{{graph}}</a></li>
+        {% endfor %}
+    </ol>
+</head>
+<body>
+    
+</body>
+</html>

@@ -72,11 +72,11 @@ form{
    margin-bottom:-11px;
 }
 
-input, button{
+a, input, button{
   border:none;
   outline:none;
   display:inline-block;
-  height:34px;
+  height:50px;
   vertical-align:middle;
   position:relative;
   bottom:14px;
@@ -87,7 +87,7 @@ input, button{
   padding:0 18px; 
 }
 
-button { 
+a, button { 
   background:rgba(197,62,126,.33) ! important;
   color:#fff;
   position:relative;

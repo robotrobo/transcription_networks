@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from graph.graph import generate_graph, insert_edge, delete_edge
 import uuid
-
+import pathlib
 GRAPH_DIR = "static/generated_graphs"
 
 
@@ -48,3 +48,8 @@ def remove_edge():
     print(data)
     print(form["name"])
     return "Okay"
+
+@app.route('/list_graphs', methods=['GET'])
+def list_graphs():
+    graph_names = [g.name for g in pathlib.Path(GRAPH_DIR).glob('*')]
+    return render_template("list_graphs.html", graphs=graph_names, dir=GRAPH_DIR)
