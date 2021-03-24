@@ -21,6 +21,12 @@ var deleteEdge = false;
 
 
 function createGraph(dot_file_name) {
+  // Refresh the colors in case there were any changes
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "/refresh_graph");
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(`name=${dot_file_name}`);
+
 
   DOTstring = readTextFile(dot_file_name);
   console.log(DOTstring);
@@ -42,13 +48,13 @@ function createGraph(dot_file_name) {
     manipulation: {
       enabled: true,
     }
+
   }
-
-  options.nodes = {
-    color: "red",
-
-  };
-
+  options = {
+    edges: {
+      color: 'gray'
+    }
+  }
   // initialize your network!
   network = new vis.Network(container, data, options);
   network.on("controlNodeDragEnd", function (params) {
@@ -60,10 +66,23 @@ function createGraph(dot_file_name) {
       xhttp.open("POST", "/add_edge");
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send(`from=${params.controlEdge.from}&to=${params.controlEdge.to}&name=${dot_file_name}`);
-
+      xhttp.addEventListener('loadend', (_) => location.reload());
     }
   });
   network.on("click", function (params) {
+
+    if (params.nodes.length != 0) {
+      let div = document.getElementById("show_seq")
+      let node_options = network.body.nodes[params.nodes[0]].options;
+      div.innerHTML =
+        `id : ${node_options.id} <br>
+       seq : ${node_options.seq} <br>
+       len : ${node_options.len}
+      `
+      console.log(params)
+    }
+
+
 
     var delete_button = document.getElementsByClassName("vis-delete")[0];
 
@@ -79,18 +98,15 @@ function createGraph(dot_file_name) {
 
       delete_button.onpointerdown = function () {
 
-          console.log("Deleting edge :\n");
-          // console.log(edge);
-          // Ask flask to remove the edge from the dot file
-          var xhttp = new XMLHttpRequest();
-          xhttp.open("POST", "/remove_edge");
-          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-          xhttp.send(`from=${edge.fromId}&to=${edge.toId}&name=${dot_file_name}`);
-    
-        
+        console.log("Deleting edge :\n");
+        // console.log(edge);
+        // Ask flask to remove the edge from the dot file
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/remove_edge");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(`from=${edge.fromId}&to=${edge.toId}&name=${dot_file_name}`);
+        xhttp.addEventListener('loadend', (_) => location.reload());
       };
     }
   });
 }
-
-

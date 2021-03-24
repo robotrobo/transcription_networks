@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from graph.graph import generate_graph, insert_edge, delete_edge
+from graph.graph import generate_graph, insert_edge, delete_edge, refresh_colors
 import uuid
 import pathlib
 GRAPH_DIR = "static/generated_graphs"
@@ -53,3 +53,9 @@ def remove_edge():
 def list_graphs():
     graph_names = [g.name for g in pathlib.Path(GRAPH_DIR).glob('*')]
     return render_template("list_graphs.html", graphs=graph_names, dir=GRAPH_DIR)
+
+@app.route('/refresh_graph', methods=['POST'])
+def refresh_graph():
+    form = request.form
+    refresh_colors(form["name"])
+    return "Okay"
