@@ -18,9 +18,22 @@
         createGraph(`{{ value }}`);
     </script>
 <a type="button" href="/">Go back</a>
-<!-- <button id="network-export">Export network</button> -->
-<div id="show_seq">
+<button onClick = "refresh_colors('{{ value }}')">Refresh colors</button>
+<button onClick = "save_graph('{{ value }}')">Save Graph</button>
 
+
+
+<div id="show_seq"></div>
+<div id="edit_seq"  hidden="true"> 
+    Enter new Data : <br>
+    ID : <input id = "new_id"  type="text">
+    Seq: <input id = "new_seq" type="text">
+    Len: <input id = "new_len" type="text">
+    <br>
+    <button onclick = "edit_node('{{value}}')">Submit</button>
+
+
+</div>
 
 </div>
 </body>

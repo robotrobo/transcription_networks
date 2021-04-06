@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect
-from graph.graph import generate_graph, insert_edge, delete_edge, refresh_colors
+from graph.graph import generate_graph, insert_edge, delete_edge, refresh_colors, edit_node
 import uuid
 import pathlib
+import shutil
 GRAPH_DIR = "static/generated_graphs"
 
 
@@ -58,4 +59,17 @@ def list_graphs():
 def refresh_graph():
     form = request.form
     refresh_colors(form["name"])
+    return "Okay"
+
+@app.route('/save_graph', methods=['POST'])
+def save_graph():
+    form = request.form
+    # Ignore the leading slash in the old_name
+    shutil.copyfile(form["old_name"][1:], f"{GRAPH_DIR}/{form['new_name']}")
+    return "Okay"
+
+@app.route('/edit_node', methods=['POST'])
+def edit_node_graph():
+    form = request.form
+    edit_node(form["name"], form["old_id"],form["id"],form["seq"],form["len"])
     return "Okay"
